@@ -44,8 +44,8 @@ package
         protected var sStreamName:String = "foo";
 		protected var username:String = "testuser";
 		protected var password:String = "testpass";
-		protected var streamWidth:int = 640;
-		protected var streamHeight:int = 480;
+		protected var streamWidth:int = 800;
+		protected var streamHeight:int = 450;
 		protected var streamQuality:int = 90;
 		protected var streamFPS:int = 20;
 		
@@ -94,11 +94,11 @@ package
 				
 			log("Producer object has been created.");
 			
-			this.statusTxt.width = 640;
-			this.statusTxt.height = 480;
+			this.statusTxt.width = 800;
+			this.statusTxt.height = 450;
 			addChild(this.statusTxt);
 			
-			this.oVideo = new Video(640, 400);
+			this.oVideo = new Video(800, 450);
 			this.addChild(this.oVideo);
 			this.oConnection = new NetConnection();
 			this.oConnection.addEventListener(NetStatusEvent.NET_STATUS, eNetStatus, false, 0, true);
@@ -240,6 +240,7 @@ package
 			var url:String = this.sMediaServerURL;
 			var forcedVersion:String = null;
 			
+			/*
 			if (this.username !== '') {
 				forcedVersion = "FMLE/3.0";
 				// since going to authenticate the same way FMLE does but we can't override
@@ -272,6 +273,7 @@ package
 				
 				url += "&challenge=" + this.challenge + "&response=" + response + "&opaque=" + this.opaque;
 			}
+			*/
 			
 			log("Connecting to url: " + url);
 			this.oConnection.connect(url, null, null, null, forcedVersion);
@@ -331,7 +333,7 @@ package
 					
 					var h264Settings:H264VideoStreamSettings = new H264VideoStreamSettings();
 					h264Settings.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_3_1);
-					h264Settings.keyFrameInterval = 1;
+					h264Settings.setKeyFrameInterval(1);
 					
 					this.oNetStream.videoStreamSettings = h264Settings;
 					
