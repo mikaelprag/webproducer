@@ -1,6 +1,5 @@
 package
 {
-	
 	import com.hurlant.crypto.hash.IHash;
 	
 	import flash.display.LoaderInfo;
@@ -39,13 +38,17 @@ package
 	// error "net" -> 
 	public class producer extends Sprite
 	{
+		protected const DEFAULT_VIDEO_WIDTH:int = 800;
+		protected const DEFAULT_VIDEO_HEIGHT:int = 450;
+		
 		protected var id:String;
 		protected var sMediaServerURL:String = "rtmp://127.0.0.1:1935/live";
         protected var sStreamName:String = "foo";
 		protected var username:String = "testuser";
 		protected var password:String = "testpass";
-		protected var streamWidth:int = 800;
-		protected var streamHeight:int = 450;
+		protected var token:String = "12345";
+		protected var streamWidth:int = DEFAULT_VIDEO_WIDTH;
+		protected var streamHeight:int = DEFAULT_VIDEO_HEIGHT;
 		protected var streamQuality:int = 90;
 		protected var streamFPS:int = 20;
 		
@@ -76,7 +79,7 @@ package
 		public function reloadParams():void {
 			// load parameters coming from the html page, for the moment we just read the id
 			var parameters:Object = LoaderInfo(this.root.loaderInfo).parameters;
-			var id = parameters["id"];
+			var id:String = parameters["id"];
 			if (!id) {
 				log("ERROR: you must provide an id");
 				return;
@@ -94,11 +97,11 @@ package
 				
 			log("Producer object has been created.");
 			
-			this.statusTxt.width = 800;
-			this.statusTxt.height = 450;
+			this.statusTxt.width = DEFAULT_VIDEO_WIDTH;
+			this.statusTxt.height = DEFAULT_VIDEO_HEIGHT;
 			addChild(this.statusTxt);
 			
-			this.oVideo = new Video(800, 450);
+			this.oVideo = new Video(DEFAULT_VIDEO_WIDTH, DEFAULT_VIDEO_HEIGHT);
 			this.addChild(this.oVideo);
 			this.oConnection = new NetConnection();
 			this.oConnection.addEventListener(NetStatusEvent.NET_STATUS, eNetStatus, false, 0, true);
@@ -276,6 +279,10 @@ package
 			*/
 			
 			log("Connecting to url: " + url);
+			
+			// Add token to the URL
+			url += "?token=" + this.token;
+			
 			this.oConnection.connect(url, null, null, null, forcedVersion);
 		}
 		
