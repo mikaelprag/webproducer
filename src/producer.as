@@ -44,9 +44,10 @@ package
 		protected var id:String;
 		protected var sMediaServerURL:String = "rtmp://127.0.0.1:1935/live";
         protected var sStreamName:String = "foo";
-		protected var username:String = "testuser";
-		protected var password:String = "testpass";
-		protected var token:String = "12345";
+		protected var username:String = "";
+		protected var password:String = "";
+		protected var token:String = "";
+		protected var amount:String = "";
 		protected var streamWidth:int = DEFAULT_VIDEO_WIDTH;
 		protected var streamHeight:int = DEFAULT_VIDEO_HEIGHT;
 		protected var streamQuality:int = 90;
@@ -109,6 +110,8 @@ package
 			
 			if (ExternalInterface.available) {
 				ExternalInterface.addCallback("log", this.log);
+				ExternalInterface.addCallback("setToken", this.setToken);
+				ExternalInterface.addCallback("setAmount", this.setAmount);
 				ExternalInterface.addCallback("setCredentials", this.setCredentials);
 				ExternalInterface.addCallback("getCredentials", this.getCredentials);
 				ExternalInterface.addCallback("setUrl", this.setUrl);
@@ -194,6 +197,13 @@ package
 			return this.sMediaServerURL;
 		}
 		
+		public function setToken(token:String):void {
+			this.token = token;
+		}
+		
+		public function setAmount(amount:String):void {
+			this.amount = amount;
+		}
 		
 		public function setStreamName(streamName:String):void {
 			this.sStreamName = streamName;
@@ -278,10 +288,10 @@ package
 			}
 			*/
 			
-			log("Connecting to url: " + url);
-			
 			// Add token to the URL
-			url += "?token=" + this.token;
+			url += "?token=" + this.token + "&amount=" + this.amount;
+			
+			log("Connecting to url: " + url);
 			
 			this.oConnection.connect(url, null, null, null, forcedVersion);
 		}
