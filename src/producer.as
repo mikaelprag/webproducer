@@ -21,6 +21,8 @@ package
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
 	import flash.utils.setTimeout;
+	import flash.system.Security;
+	import flash.system.SecurityPanel;
 	
 	// how to force proper codecs
 	// http://www.adobe.com/devnet/adobe-media-server/articles/encoding-live-video-h264.html
@@ -97,6 +99,11 @@ package
             }
 				
 			log("Producer object has been created.");
+			
+			var camera:Camera = Camera.getCamera();
+			if (camera.muted) {
+				showSecurityPanel();
+			}
 			
 			this.statusTxt.width = DEFAULT_VIDEO_WIDTH;
 			this.statusTxt.height = DEFAULT_VIDEO_HEIGHT;
@@ -333,6 +340,10 @@ package
 		
 		protected function eMetaDataReceived(oObject:Object):void {
             log("MetaData: " + oObject.toString()); // debug log..
+		}
+		
+		private function showSecurityPanel():void {
+			Security.showSettings(SecurityPanel.PRIVACY);
 		}
 		
 		private function eNetStatus(oEvent1:NetStatusEvent):void {
